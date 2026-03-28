@@ -1,6 +1,6 @@
 files = sniffer.c
 name = network-monitor
-flags = -Wall
+flags = -Wall -lpcap
 
 
 all:
