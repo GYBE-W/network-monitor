@@ -3,3 +3,7 @@ docker run --rm -it \
     --cap-add NET_RAW \
     --cap-add NET_ADMIN \
     network-monitor wlp2s0
+
+make
+
+./network_monitor
