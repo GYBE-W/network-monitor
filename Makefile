@@ -7,11 +7,11 @@ libs = -lpcap
 $(name): $(objs)
 	gcc $(flags) -o $(name) $(objs) $(libs)
 
-sniffer.o: sniffer.c
-	gcc $(flags) -c sniffer.c $(libs)
+src/sniffer.o: src/sniffer.c
+	gcc $(flags) -c src/sniffer.c $(libs)
 
-parser.o: parser.c
-	gcc $(flags) -c parser.c $(libs)
+src/parser.o: src/parser.c
+	gcc $(flags) -c src/parser.c $(libs)
 
 clean:
 	rm -f $(name) $(objs)
