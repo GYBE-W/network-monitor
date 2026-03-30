@@ -27,10 +27,12 @@ pcap_t* abrir_interface_wifi(char *nome_interface) {
 
 
 int main(int argc, char*argv[]){
+    char*interface_name=argv[1];
     printf("I am a sniffer\n");
     char*ligma="ligma";
     printf("%u\n",PCAP_CHAR_ENC_UTF_8);
-    pcap_t*wifi=abrir_interface_wifi("wlp2s0");
+    pcap_t*wifi=abrir_interface_wifi(interface_name);
     pcap_loop(wifi,0, packet_handler, NULL);
+    printf("gormiti");
     //pcap_init(PCAP_CHAR_ENC_LOCAL,ligma);
 }
