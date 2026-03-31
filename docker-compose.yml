@@ -2,8 +2,7 @@ services:
   sniffer:
     build: .
     network_mode: "host"
-    environment:
-      - INTERFACE=enx0
+    command: ["${IFACE}"]
     cap_add:
       - NET_RAW
       - NET_ADMIN
