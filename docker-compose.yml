@@ -1,0 +1,29 @@
+services:
+  sniffer:
+    build: .
+    network_mode: "host"
+    environment:
+      - INTERFACE=enx0
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    restart: always
+
+  influxdb:
+    image: influxdb:2.7
+    ports:
+      - "8086:8086"
+    volumes:
+      - influx-data:/var/lib/influxdb2
+    restart: always
+
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+    restart: always
+
+volumes:
+  influx-data:
