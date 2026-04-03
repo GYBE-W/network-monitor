@@ -1,6 +1,6 @@
 # Stage 1: Build
 FROM gcc:12 AS builder
-RUN apt-get update && apt-get install -y libpcap-dev
+RUN apt-get update && apt-get install -y libpcap-dev libcurl4-openssl-dev
 WORKDIR /app
 COPY . .
 RUN make
