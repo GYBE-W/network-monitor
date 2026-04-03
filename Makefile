@@ -1,7 +1,7 @@
 objs = sniffer.o parser.o
 name = network-monitor
 flags = -Wall
-libs = -lpcap
+libs = -lpcap -lcurl
 
 
 $(name): $(objs)
