@@ -9,10 +9,10 @@ InfluxDB 2.7: Time-series database storing traffic metrics.
 Grafana: Visualization dashboard connected to InfluxDB.
 
 
-# 2. Importar o ficheiro para o Docker local
+# 2. Import file for local docker
 docker load -i network-monitor.tar
 
-# 3. Correr normalmente com o docker compose
+# 3. Running with the docker compose
 DOCKER_BUILDKIT=0 IFACE=XXX docker-compose up --build (build e up) -d (dettached)
 
 # 4. Check if data is flowing
