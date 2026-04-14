@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <pcap.h>
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
@@ -11,15 +12,27 @@ void send_to_influx(const char *proto, int length) {
     CURL *curl;
     CURLcode res;
 
+    char *token = getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN");
+    char *org = getenv("DOCKER_INFLUXDB_INIT_ORG");
+    char *bucket = getenv("DOCKER_INFLUXDB_INIT_BUCKET");
+
+    if (token == NULL)  printf("MACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACAC");
+    if (org == NULL)    printf("MACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACAC");
+    if (bucket == NULL) printf("MACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACACAC");
+
     curl = curl_easy_init();
     if(curl) {
         // Ajusta o URL: nome do serviço no compose (influxdb), porta, org e bucket
         // Change this line in parser.c
-	    const char *url = "http://127.0.0.1:8086/api/v2/write?org=Org&bucket=Testes&precision=s";
+	    char url[256];
+        snprintf(url,sizeof(url),"http://127.0.0.1:8086/api/v2/write?org=%s&bucket=%s&precision=s",org,bucket);
         
         // O Token que o teu sócio definiu (ou que geras no Influx)
+
         struct curl_slist *headers = NULL;
-        headers = curl_slist_append(headers, "Authorization: Token x9OuPgV9QaRIR6HHWNBCwBH4HPrmAdm1r0oKqixeLof51F302iEArglBLlqzhnlsA79k7lChEk43rWB_QC5hlA==");
+        char tokenHeader[256];
+        snprintf(tokenHeader,sizeof(tokenHeader),"Authorization: Token %s",token);
+        headers = curl_slist_append(headers, tokenHeader);
         headers = curl_slist_append(headers, "Content-Type: text/plain; charset=utf-8");
 
         // Formatar os dados (Line Protocol)
@@ -41,10 +54,10 @@ void send_to_influx(const char *proto, int length) {
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
             if(http_code == 204) {
-                printf("[+] SUCESSO: Métrica enviada (HTTP 204)\n");
+                //printf("[+] SUCESSO: Métrica enviada (HTTP 204)\n");
             } else {
-                printf("[!] ERRO INFLUXDB: Código %ld\n", http_code);
-                printf("    (Dica: 401=Token, 404=Bucket/Org, 400=Sintaxe)\n");
+                //printf("[!] ERRO INFLUXDB: Código %ld\n", http_code);
+                //printf("    (Dica: 401=Token, 404=Bucket/Org, 400=Sintaxe)\n");
             }
         }
 
@@ -68,21 +81,21 @@ void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char
         ip_header = (struct ip *)(packet + sizeof(struct ether_header));
         
         // Extrair IPs usando inet_ntoa (converte binário para string "192.168...") [cite: 60, 61]
-        printf("Origem: %s | ", inet_ntoa(ip_header->ip_src));
-        printf("Destino: %s | ", inet_ntoa(ip_header->ip_dst));
+        //printf("Origem: %s | ", inet_ntoa(ip_header->ip_src));
+        //printf("Destino: %s | ", inet_ntoa(ip_header->ip_dst));
         
         // 3. Identificar Protocolo [cite: 64]
         if (ip_header->ip_p == IPPROTO_TCP) {
-            printf("Protocolo: TCP\n");
+            //printf("Protocolo: TCP\n");
         } else if (ip_header->ip_p == IPPROTO_UDP) {
-            printf("Protocolo: UDP\n");
+            //printf("Protocolo: UDP\n");
         } else {
-            printf("Protocolo: Outro (%d)\n", ip_header->ip_p);
+            //printf("Protocolo: Outro (%d)\n", ip_header->ip_p);
         }
         
         // 4. Tamanho do pacote [cite: 65]
-        printf("Tamanho: %d bytes\n", header->len);
-        printf("------------------------------------------\n");
+        //printf("Tamanho: %d bytes\n", header->len);
+        //printf("------------------------------------------\n");
 
         char *proto_name = "Outro";
     int tamanho = header->len; // O tamanho real do pacote em bytes
