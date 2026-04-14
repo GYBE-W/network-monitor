@@ -15,7 +15,7 @@ void send_to_influx(const char *proto, int length) {
     if(curl) {
         // Ajusta o URL: nome do serviço no compose (influxdb), porta, org e bucket
         // Change this line in parser.c
-	const char *url = "http://127.0.0.1:8086/api/v2/write?org=Org&bucket=Testes&precision=s";
+	    const char *url = "http://127.0.0.1:8086/api/v2/write?org=Org&bucket=Testes&precision=s";
         
         // O Token que o teu sócio definiu (ou que geras no Influx)
         struct curl_slist *headers = NULL;
